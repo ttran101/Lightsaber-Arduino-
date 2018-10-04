@@ -1,0 +1,57 @@
+#include <Adafruit_NeoPixel.h>
+
+#define PIN 2	 // input pin Neopixel is attached to
+#define NUMPIXELS      12 // number of neopixels in Ring
+Adafruit_NeoPixel pixels1 = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+#define PIN 3
+#define NUMPIXELS      12
+Adafruit_NeoPixel pixels2 = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+int delayval = 100; // timing delay
+
+int redColor = 0;
+int greenColor = 0;
+int blueColor = 0;
+int sensorValue = 0;
+
+void setup() {
+  pixels1.begin();
+  pixels2.begin();
+  pinMode(A0, INPUT);
+//  Serial.begin(9600);
+}
+
+void loop() {
+  setColor();
+  Lights();
+  delay(delayval);
+  
+}
+
+void Lights(){
+  for(int i=0;i<NUMPIXELS;i=i+3){
+    pixels1.setPixelColor(i,pixels1.Color(redColor,greenColor,blueColor));
+    pixels2.setPixelColor(i,pixels2.Color(redColor,greenColor,blueColor));
+	pixels1.show();
+    pixels2.show();
+  }
+}
+void setColor(){
+  if (analogRead(A0) < 333){
+    redColor = 255;
+    greenColor = 0;
+    blueColor = 0;
+  }
+  else if (analogRead(A0) > 333 && analogRead(A0) < 666){
+    greenColor = 255;
+    redColor = 0;
+    blueColor = 0;
+  }
+  else if (analogRead(A0) > 666){
+    blueColor = 255;
+    greenColor = 0;
+    redColor = 0;
+  }
+}
+// setColor()
+// picks random values to set for RGB
+
